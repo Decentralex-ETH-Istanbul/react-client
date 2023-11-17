@@ -1,35 +1,31 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Button from "./Button";
 // src/components/About.js
 const Create = () => {
-    return (
+  return (
+    <div>
+      {/* Main content */}
       <div>
-         {/* Main content */}
-         <div>
-          {/* <SvgWrapper>
+        {/* <SvgWrapper>
             <EnsSVG />
           </SvgWrapper> */}
 
-          <h1>Join as a client or freelancer</h1>
+        <h1>Join as a client or freelancer</h1>
 
+        <div>
           <div>
-            <div>
-              <button className="mx-auto text-3xl font-bold"  onClick={undefined}>
-                Client
-              </button>
-            </div>
-            <div>
-              <button className="mx-auto text-3xl font-bold" >
-                Freelancer
-              </button>
-            </div>
+            <Button>Client</Button>
           </div>
-          <div className="flex justify-center">
+          <div>
+            <Button>Freelancer</Button>
+          </div>
+        </div>
+        <div className="flex justify-center">
           <ConnectButton showBalance={false} />
         </div>
-        </div>
       </div>
-    );
-  };
-  
-  export default Create;
-  
+    </div>
+  );
+};
+
+export default Create;
