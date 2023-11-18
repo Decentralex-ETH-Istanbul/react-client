@@ -2,7 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "@mui/material";
 import lighthouse from '@lighthouse-web3/sdk'
 import { useAccount } from "wagmi";
-import React from "react";
+import React, { useEffect } from "react";
 
 enum Role{
   Client="Client",
@@ -22,6 +22,11 @@ const Create = () => {
     const response = await lighthouse.uploadText(data, apiKey, address)
     console.log(response)
   }
+
+  useEffect(() => {
+    console.log(address)
+  }, [])
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-6 py-8">
     <div className="bg-white rounded-xl shadow-xl p-8 md:p-12 lg:p-16 w-full max-w-4xl space-y-6">
