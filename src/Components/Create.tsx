@@ -8,9 +8,7 @@ enum Role{
   Freelancer="Freelancer"
 }
 
-dotenv.config(); // Load environment variables
-
-const apiKey = process.env.REACT_APP_LIGHTHOUSE_API_KEY || ""
+const apiKey = "5286993e.eb9b1390632d415c988986f066e1abc6" || ""
 
 const Create = () => {
 
@@ -33,8 +31,7 @@ const Create = () => {
             className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-xl md:text-2xl"
             variant="contained"
             onClick={handleUpload(Role.Client)}
-            disabled={!address}
-            href="/chat"
+            disabled={true}
           >
             Client
           </Button>
@@ -45,7 +42,7 @@ const Create = () => {
             variant="contained"
             disabled={!address}
             onClick={handleUpload(Role.Freelancer)}
-            href="/chat"
+            href="/freelancerProfile"
           >
             Freelancer
           </Button>

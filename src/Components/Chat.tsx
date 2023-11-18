@@ -13,6 +13,7 @@ const Chat = () => {
             <Button
               className="mt-2 px-4 py-2 bg-white-500 text-black rounded hover:bg-white-600"
               variant="outlined"
+              href="/supportForm"
             >
               Report an issue
             </Button>
@@ -20,9 +21,9 @@ const Chat = () => {
               <span className="text-gray-500 text-xl md:text-2xl">CHAT</span>
             </div>
           </div>
-          <button className="w-full bg-blue-600 text-white text-lg md:text-xl p-4 rounded-lg hover:bg-blue-700 transition duration-300">
+          <Button variant="contained" disabled={true} className="w-full bg-blue-600 text-white text-lg md:text-xl p-4 rounded-lg hover:bg-blue-700 transition duration-300">
             Accept Final Delivery
-          </button>
+          </Button>
         </div>
       </div>
     </div>
