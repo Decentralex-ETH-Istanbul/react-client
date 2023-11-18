@@ -52,40 +52,98 @@ import axios from 'axios';
 //   export default Chat;
   
 import { Button } from "@mui/material";
-import { useAccount } from "wagmi";
+import { useAccount, useSigner } from "wagmi";
 
-let data: any[] = [];
-
-axios.get('http://localhost:3000/fetchArray')
-    .then((response: { data: any[] }) => {
-      // handle success
-      data = response.data;
-        console.log('Response is an array:', response.data);
-        console.log('Response is not an array:', response.data);
-    })
-    .catch((error: any) => {
-        // handle error
-        console.log('Error:', error);
-    });
-
-    console.log('Data:', data);
 
 // src/components/About.js
 const Chat = () => {
 
   const {address: clientAddress} = useAccount();
+  const userSigner = useSigner()
+
   const freelanceAddress = '0x2A52c31958Bcc72680991373daC2EBf482b610f2'
 
-  console.log('clientAddress', clientAddress)
+  const [data, setData] = useState<any>([]);
 
+  const handleChatCreation = async (clientAddress: string, freelancerAddress: string, chatId: any) => {
+    const response = await axios.post('http://localhost:3000/AddToArray', { clientAddress, freelancerAddress, chatId })
+
+    console.log('resdata: ',response.data)
+
+  }
 
 
   useEffect(() => {
-    const chatItem = data.find(item => item.client === clientAddress && item.freelancer === freelanceAddress);
-
-    console.log('chatIdIs' , chatItem)
-
+    axios.get('http://localhost:3000/fetchArray')
+      .then((response) => {
+        // Update state with fetched data
+        setData(response.data);
+        console.log('Response data:', response.data);
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      });
   }, []);
+
+  // Use data safely here. It will be updated once the request completes.
+  useEffect(() => {
+    if (data.length > 0) {
+      const chatItem = data.find((item: { client: string | undefined; freelancer: string; }) => item.client === clientAddress && item.freelancer === freelanceAddress);
+
+      console.log('chatItem: ', chatItem)
+    if(chatItem == undefined) {
+
+      console.log('undfn')
+
+      const initializeUser = async (userSigner: any) => {
+        const createdUser = await PushAPI.initialize(userSigner, { env: "prod" });
+        
+        return createdUser;
+      }
+      
+      const user = initializeUser(userSigner);
+
+      const groupDetails = {
+        name: "Freelance Chat",
+        options: {
+          description: "Freelance Chat",
+          members: [freelanceAddress],
+          admins: [],
+          private: false
+        }
+      };
+
+
+      const createGroup = async () => {
+        const createdGroup = (await user).chat.group.create(groupDetails.name, groupDetails.options);
+
+        console.log('createdGroup: ', createdGroup)
+
+        return createdGroup;
+      }
+
+      const handleGroupCreation = async () => {
+
+        console.log('creating')
+        const group =  await createGroup();
+        console.log('ghroup: ', group)
+
+        // const chatId = group.chatId;
+
+        // console.log('chatIddd: ', chatId)
+        
+        console.log('group: ', group);
+
+        // handleChatCreation(clientAddress!, freelanceAddress, chatId)
+
+      }
+
+      handleGroupCreation();
+
+    }
+      console.log('chatItem:', chatItem);
+    }
+  }, [data]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 p-4">
