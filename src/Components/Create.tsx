@@ -37,7 +37,7 @@ const Create = () => {
             className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-xl md:text-2xl"
             variant="contained"
             onClick={handleUpload(Role.Client)}
-            disabled={true}
+            href="/freelancerProfile"
           >
             Client
           </Button>
@@ -46,9 +46,9 @@ const Create = () => {
           <Button
             className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-xl md:text-2xl"
             variant="contained"
-            disabled={!address}
+            disabled={true}
             onClick={handleUpload(Role.Freelancer)}
-            href="/freelancerProfile"
+            href=""
           >
             Freelancer
           </Button>
