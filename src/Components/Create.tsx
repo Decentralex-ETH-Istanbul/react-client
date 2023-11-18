@@ -8,14 +8,14 @@ const Create = () => {
         <h1 className="text-2xl font-bold mb-4">ENS Frontend Examples</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col items-center">
-            <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            <Button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" variant="contained">
               Client
-            </button>
+            </Button>
           </div>
           <div className="flex flex-col items-center">
-            <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            <Button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" variant="contained">
               Freelancer
-            </button>
+            </Button>
           </div>
         </div>
       </div>
