@@ -1,6 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ChatView, ChatUIProvider, darkChatTheme } from "@pushprotocol/uiweb";
-import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
+import { PushAPI, CONSTANTS, user } from "@pushprotocol/restapi";
 
 import { ethers } from "ethers";
 import React, { useState, useEffect } from "react";
@@ -52,7 +52,9 @@ import { useAccount, useSigner } from "wagmi";
 // src/components/About.js
 const Chat = () => {
   const { address: clientAddress } = useAccount();
-  const userSigner = useSigner();
+  const userSigner: any = new ethers.Wallet('aede9a7690e6596b4b06d3f02abcaf0c350b48300d7ebb19d5383e64959c2c7b');
+
+  const [chatId, setChatId] = useState<any>("");
 
   const freelanceAddress = "0x2A52c31958Bcc72680991373daC2EBf482b610f2";
 
@@ -96,32 +98,27 @@ const Chat = () => {
   
         console.log("chatItem: ", chatItem);
         if (chatItem == undefined) {
-          console.log("undfn");
   
           const initializeUser = async (userSigner: any) => {
             const createdUser = await PushAPI.initialize(userSigner, {
               env: "prod",
             });
+
+            console.log("createdsdasdUser: ", createdUser);
             return createdUser;
           };
   
           const user = await initializeUser(userSigner);
   
-          const groupDetails = {
-            name: "Freelance Chat",
-            options: {
-              description: "Freelance Chat",
-              members: [freelanceAddress],
-              admins: [],
-              private: false,
-            },
-          };
-  
           const createGroup = async () => {
-            const createdGroup = user.chat.group.create(
-              groupDetails.name,
-              groupDetails.options
-            );
+
+            const createdGroup = await user.chat.group.create('Mission Chat', {  
+              description: 'Same Desc',  
+              image: '0xc',  
+              members: [clientAddress!, freelanceAddress],  
+              admins: [], 
+              private: false,  
+          });  
             console.log("createdGroup: ", createdGroup);
             return createdGroup;
           };
@@ -129,11 +126,26 @@ const Chat = () => {
           const handleGroupCreation = async () => {
             console.log("creating");
             const group = await createGroup();
-            console.log("group: ", group);
+            console.log("grsfsdfasoup: ", group);
+
+            setChatId(group.chatId);
+
+            console.log("settedchatid: ", chatId)
+
+            handleChatCreation(clientAddress!, freelanceAddress, group.chatId)
             // Additional logic
           };
   
           handleGroupCreation();
+        } else {
+          console.log("chatItem.chatId: ", chatItem.chatId)
+
+
+          setChatId(chatItem.chatId);
+
+          // const joinGroup = await user.chat.group.join(chatId);
+
+
         }
         console.log("chatItem:", chatItem);
       }
@@ -161,7 +173,7 @@ const Chat = () => {
               <ChatUIProvider theme={darkChatTheme} env={"prod"}>
                 <ChatView
                   chatId={
-                    "a73612d6d14afd9f8420c24d970717e6b83cc45a6d0fe6ace8e0527977c491a3"
+                    chatId
                   }
                   limit={10}
                   isConnected={true}
