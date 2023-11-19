@@ -2,6 +2,12 @@ import { useState } from "react";
 // You can place this component where you need the modal to be triggered
 import React from "react";
 import { Button } from "@mui/material";
+import {
+  usePrepareContractWrite,
+  useContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
+import { SMARTCONTRACT_ADDRESS } from "../consts";
 
 type SupportFeeModalProps = {
   isOpen: boolean;
@@ -74,6 +80,33 @@ const SupportFeeModal: React.FC<SupportFeeModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
+  const [serviceId, setServiceId] = useState(0);
+  const { config } = usePrepareContractWrite({
+    address: SMARTCONTRACT_ADDRESS,
+    abi: [
+      {
+        name: "depositFunds",
+        type: "function",
+        stateMutability: "payable",
+        inputs: [
+          { internalType: "uint32", name: "serviceId", type: "uint32" },
+          { internalType: "address", name: "seller", type: "address" },
+        ],
+        args: [serviceId],
+        enabled: Boolean(serviceId),
+      },
+    ],
+    functionName: "depositFunds",
+    args: [serviceId],
+    enabled: Boolean(serviceId),
+  });
+
+  const { data, write } = useContractWrite(config);
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
   return (
     <div
       className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
@@ -95,14 +128,21 @@ const SupportFeeModal: React.FC<SupportFeeModalProps> = ({
             <span>15 USDC</span>
           </div>
           <div className="items-center px-4 py-3">
-            <Button
-              className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onClick={() => onClose()}
-              variant="contained"
-              href="/chat"
-            >
-              Pay fee
-            </Button>
+            {isLoading && <span>Waiting for transaction to be mined...</span>}
+            {isSuccess && (
+              <Button
+                className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => {
+                  setServiceId(serviceId + 1);
+                  write?.();
+                  onClose();
+                }}
+                variant="contained"
+                href="/chat"
+              >
+                Pay fee
+              </Button>
+            )}
           </div>
         </div>
       </div>
