@@ -69,10 +69,10 @@ const Create = () => {
       if(count === 0){
         console.log('client: ', count)
         handleUpload(Role.Client)
+        window.location.href = "/freelancerProfile";
       }
       else if(count === 1){
         console.log('Freelancer: ', count)
-
         handleUpload(Role.Freelancer)
       }
     }
@@ -95,6 +95,7 @@ const Create = () => {
               setCount(0);
           }}
             disabled={false}
+            href="/freelancerProfile"
           >
             Client
           </Button>
@@ -110,7 +111,6 @@ const Create = () => {
               loginWithRedirect();
               setCount(1);
           }}
-            href="/freelancerProfile"
           >
             Freelancer
           </Button>
