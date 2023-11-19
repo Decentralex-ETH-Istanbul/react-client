@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import lighthouse from '@lighthouse-web3/sdk'
 import { useAccount } from "wagmi";
 import React, { useEffect } from "react";
-import { apiKey } from "../consts";
+import { API_KEY } from "../consts";
 
 enum Role{
   Client="Client",
@@ -16,7 +16,7 @@ const Create = () => {
 
   const handleUpload: any = async( role: Role) => {
     const data = `${address}/${role}/wdID-XXX` 
-    const response = await lighthouse.uploadText(data, apiKey, address)
+    const response = await lighthouse.uploadText(data, API_KEY, address)
     console.log(response)
   }
 

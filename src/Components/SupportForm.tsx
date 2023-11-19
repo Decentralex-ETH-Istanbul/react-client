@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from "react";
 import { Button } from "@mui/material";
 import lighthouse from "@lighthouse-web3/sdk";
-import { apiKey } from "../consts";
+import { API_KEY } from "../consts";
 
 enum IssueOption {
   Milestone = "milestone",
@@ -40,7 +40,7 @@ const SupportForm: React.FC = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const data = `dispute/${title}/${reason}/`;
-    const response = await lighthouse.uploadText(data, apiKey);
+    const response = await lighthouse.uploadText(data, API_KEY);
     console.log("lighthouse response", response);
     console.log(selectedOption);
     // You would typically send `selectedOption` to your server or state management

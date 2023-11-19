@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import OpenDispute from "./OpenDispute";
 import lighthouse from "@lighthouse-web3/sdk";
-import { apiKey } from "../consts";
+import { API_KEY } from "../consts";
 import axios from "axios";
 
 // Example type for dispute data, can be expanded as needed
@@ -27,7 +27,7 @@ const OpenDisputesGrid: React.FC = () => {
       @param {string} apiKey - Your API key.
       @param {number} [pageNo=1] - The page number for pagination, defaults to 1.
     */
-    const response = await lighthouse.getUploads(apiKey);
+    const response = await lighthouse.getUploads(API_KEY);
     console.log("lighthouse response", response);
     return response;
   };
