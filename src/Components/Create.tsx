@@ -3,29 +3,22 @@ import { Button } from "@mui/material";
 import lighthouse from '@lighthouse-web3/sdk'
 import { useAccount } from "wagmi";
 import React, { useEffect } from "react";
+import { apiKey } from "../consts";
 
 enum Role{
   Client="Client",
   Freelancer="Freelancer"
 }
 
-const apiKey = "5286993e.eb9b1390632d415c988986f066e1abc6" || ""
-
 const Create = () => {
 
   const { address } = useAccount();
-
-  console.log("address", address)
 
   const handleUpload: any = async( role: Role) => {
     const data = `${address}/${role}/wdID-XXX` 
     const response = await lighthouse.uploadText(data, apiKey, address)
     console.log(response)
   }
-
-  useEffect(() => {
-    console.log(address)
-  }, [])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-6 py-8">
