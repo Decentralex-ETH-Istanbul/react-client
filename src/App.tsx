@@ -1,7 +1,6 @@
 // src/App.js
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import About from "./Components/About";
 import Create from "./Components/Create";
 import Chat from "./Components/Chat";
 import FreelancerProfile from "./Components/FreelancerProfile";
@@ -15,7 +14,6 @@ const App = () => {
       <Routes>
         <Route path="/create" element={<Create />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/about" element={<About />} />
         <Route path="/freelancerProfile" element={<FreelancerProfile />} />
         <Route path="/supportForm" element={<SupportForm />} />
         <Route path="/openDisputeGrid" element={<OpenDisputesGrid />} />
