@@ -121,7 +121,7 @@ const wagmiClient = createClient({
 
 const onRedirectCallback = (appState: any) => {
   history.push(
-    appState && appState.returnTo ? appState.returnTo : "http://localhost:5173/create"
+    appState && appState.returnTo ? appState.returnTo : "http://localhost:5173/freelancerProfile"
   );
 
   
@@ -136,7 +136,7 @@ const providerConfig = {
   clientId: config.clientId,
   onRedirectCallback,
   authorizationParams: {
-    redirect_uri: "http://localhost:5173/create",
+    redirect_uri: "http://localhost:5173/freelancerProfile",
     ...(config.audience ? { audience: config.audience } : null),
   },
 };

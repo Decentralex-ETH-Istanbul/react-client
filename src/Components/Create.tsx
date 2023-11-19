@@ -30,6 +30,9 @@ const Create = () => {
     if (isAuthenticated) {
       console.log("user", user)
       console.log("address", address)
+      // window.location.href = "/freelancerProfile";
+
+
     }
   }, [isAuthenticated])
 
@@ -66,10 +69,12 @@ const Create = () => {
     if(user){
       console.log('connected')
 
+
+
       if(count === 0){
         console.log('client: ', count)
         handleUpload(Role.Client)
-        window.location.href = "/freelancerProfile";
+        
       }
       else if(count === 1){
         console.log('Freelancer: ', count)
@@ -95,7 +100,6 @@ const Create = () => {
               setCount(0);
           }}
             disabled={false}
-            href="/freelancerProfile"
           >
             Client
           </Button>

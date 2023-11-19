@@ -32,14 +32,14 @@ const OpenDisputesGrid: React.FC = () => {
     return response;
   };
 
-  // useEffect(() => {
+//   useEffect(() => {
 
-  //   handleFileDownload()
-  // }, []);
+//     handleFileDownload()
+//   }, []);
 
-  //   useEffect(() => {
-  //      = getUploads()
-  // },[])
+//     useEffect(() => {
+//        = getUploads()
+//   },[])
 
 //   const handleFileDownload = async () => {
 //     console.log("Fetching file list...");
