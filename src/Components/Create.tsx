@@ -2,25 +2,24 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "@mui/material";
 import lighthouse from '@lighthouse-web3/sdk'
 import { useAccount } from "wagmi";
+import React, { useEffect } from "react";
+import { apiKey } from "../consts";
 
 enum Role{
   Client="Client",
   Freelancer="Freelancer"
 }
 
-const apiKey =  ""
-
 const Create = () => {
 
   const { address } = useAccount();
-
-  console.log("address", address)
 
   const handleUpload: any = async( role: Role) => {
     const data = `${address}/${role}/wdID-XXX` 
     const response = await lighthouse.uploadText(data, apiKey, address)
     console.log(response)
   }
+
   return (
     
     <div className="flex flex-col items-center justify-center min-h-screen px-6 py-8 bg-gradient-to-t from-yellow-100 to-indigo-200">
@@ -34,8 +33,7 @@ const Create = () => {
             className=" login-button px-6 py-3  text-white rounded hover:bg-blue-600 transition duration-300 text-xl md:text-2xl "
             variant="contained"
             onClick={handleUpload(Role.Client)}
-            disabled={!address}
-            href="/chat"
+            href="/freelancerProfile"
           >
             Client
           </Button>
@@ -46,9 +44,9 @@ const Create = () => {
           <Button
             className=" login-button px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-xl md:text-2xl"
             variant="contained"
-            disabled={!address}
+            disabled={true}
             onClick={handleUpload(Role.Freelancer)}
-            href="/chat"
+            href=""
           >
             Freelancer
           </Button>

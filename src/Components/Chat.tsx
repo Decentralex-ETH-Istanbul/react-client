@@ -1,7 +1,159 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ChatView, ChatUIProvider, darkChatTheme } from "@pushprotocol/uiweb";
+import { PushAPI, CONSTANTS, user } from "@pushprotocol/restapi";
+
+import { ethers } from "ethers";
+import React, { useState, useEffect } from "react";
+
+import axios from "axios";
+
+// // src/components/About.js
+// const Chat = () => {
+
+//   // const groupId = 'c51420c8a053ead33b286edff58fa2cc379497da5420e895b73b5a2a9b1f4817'
+
+//   // const prvt = 'aede9a7690e6596b4b06d3f02abcaf0c350b48300d7ebb19d5383e64959c2c7b'
+
+//   const signer = ethers.Wallet.createRandom();
+
+//     return (
+
+//       <>
+
+//         <button onClick={handleCreateGroup} style={{ backgroundColor: "lightblue", padding: "5px 10px 5px 10px", borderRadius: "5px", marginLeft: '10px',marginTop: '10px' ,marginRight: '10px' }} >Create New Group</button>
+//         <label htmlFor="">{groupId}</label>
+//         <div style={{ marginLeft: '10px' }}> <br />
+
+//         <input type="text" placeholder="Enter Recipient Address" style={{ padding: '5px 10px 5px 10px' }}/>
+
+//         <button style={{ backgroundColor: "lightblue", padding: "5px 10px 5px 10px", borderRadius: "5px" }} >Add recipient</button>
+//         </div>
+
+//         <div style={{ height: "100vh", margin: "20px auto" }}>
+//   <ChatUIProvider theme={darkChatTheme} env={"prod"}>
+//     <ChatView
+//       chatId={groupId}
+//       limit={10}
+//       isConnected={true}
+//       // verificationFailModalPosition={MODAL_POSITION_TYPE.RELATIVE}
+//     />
+// </ChatUIProvider>
+//         </div>
+//     </>
+
+//     );
+//   };
+
+//   export default Chat;
+
 import { Button } from "@mui/material";
+import { useAccount, useSigner } from "wagmi";
+
 // src/components/About.js
 const Chat = () => {
+  const { address: clientAddress } = useAccount();
+  const userSigner: any = new ethers.Wallet('aede9a7690e6596b4b06d3f02abcaf0c350b48300d7ebb19d5383e64959c2c7b');
+
+  const [chatId, setChatId] = useState<any>("");
+
+  const freelanceAddress = "0x2A52c31958Bcc72680991373daC2EBf482b610f2";
+
+  const [data, setData] = useState<any>([]);
+
+  const handleChatCreation = async (
+    clientAddress: string,
+    freelancerAddress: string,
+    chatId: any
+  ) => {
+    const response = await axios.post("http://localhost:3000/AddToArray", {
+      clientAddress,
+      freelancerAddress,
+      chatId,
+    });
+
+    console.log("resdata: ", response.data);
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/fetchArray")
+      .then((response) => {
+        // Update state with fetched data
+        setData(response.data);
+        console.log("Response data:", response.data);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  }, []);
+
+  // Use data safely here. It will be updated once the request completes.
+  useEffect(() => {
+    const fetchData = async () => {
+      if (data.length > 0) {
+        const chatItem = data.find(
+          (item: { client: string | undefined; freelancer: string }) =>
+            item.client === clientAddress && item.freelancer === freelanceAddress
+        );
+  
+        console.log("chatItem: ", chatItem);
+        if (chatItem == undefined) {
+  
+          const initializeUser = async (userSigner: any) => {
+            const createdUser = await PushAPI.initialize(userSigner, {
+              env: "prod",
+            });
+
+            console.log("createdsdasdUser: ", createdUser);
+            return createdUser;
+          };
+  
+          const user = await initializeUser(userSigner);
+  
+          const createGroup = async () => {
+
+            const createdGroup = await user.chat.group.create('Mission Chat', {  
+              description: 'Same Desc',  
+              image: '0xc',  
+              members: [clientAddress!, freelanceAddress],  
+              admins: [], 
+              private: false,  
+          });  
+            console.log("createdGroup: ", createdGroup);
+            return createdGroup;
+          };
+  
+          const handleGroupCreation = async () => {
+            console.log("creating");
+            const group = await createGroup();
+            console.log("grsfsdfasoup: ", group);
+
+            setChatId(group.chatId);
+
+            console.log("settedchatid: ", chatId)
+
+            handleChatCreation(clientAddress!, freelanceAddress, group.chatId)
+            // Additional logic
+          };
+  
+          handleGroupCreation();
+        } else {
+          console.log("chatItem.chatId: ", chatItem.chatId)
+
+
+          setChatId(chatItem.chatId);
+
+          // const joinGroup = await user.chat.group.join(chatId);
+
+
+        }
+        console.log("chatItem:", chatItem);
+      }
+    };
+  
+    fetchData();
+  }, [data]);  
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 p-4">
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-6 py-8">
@@ -13,16 +165,30 @@ const Chat = () => {
             <Button
               className="mt-2 px-4 py-2 bg-white-500 text-black rounded hover:bg-white-600"
               variant="outlined"
+              href="/supportForm"
             >
               Report an issue
             </Button>
             <div className="flex flex-col items-center justify-center h-64 md:h-96 bg-gray-200 w-full rounded-lg mb-8 md:mb-12">
-              <span className="text-gray-500 text-xl md:text-2xl">CHAT</span>
+              <ChatUIProvider theme={darkChatTheme} env={"prod"}>
+                <ChatView
+                  chatId={
+                    chatId
+                  }
+                  limit={10}
+                  isConnected={true}
+                  // verificationFailModalPosition={MODAL_POSITION_TYPE.RELATIVE}
+                />
+              </ChatUIProvider>
             </div>
           </div>
-          <button className="w-full bg-blue-600 text-white text-lg md:text-xl p-4 rounded-lg hover:bg-blue-700 transition duration-300">
+          <Button
+            variant="contained"
+            disabled={true}
+            className="w-full bg-blue-600 text-white text-lg md:text-xl p-4 rounded-lg hover:bg-blue-700 transition duration-300"
+          >
             Accept Final Delivery
-          </button>
+          </Button>
         </div>
       </div>
     </div>
