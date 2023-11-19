@@ -3,7 +3,7 @@ import { useState } from "react";
 import React from "react";
 import { Button } from "@mui/material";
 import {
-  usePrepareContractWrite,
+  // usePrepareContractWrite,
   useContractWrite,
   useWaitForTransaction,
 } from "wagmi";
@@ -81,31 +81,31 @@ const SupportFeeModal: React.FC<SupportFeeModalProps> = ({
   if (!isOpen) return null;
 
   const [serviceId, setServiceId] = useState(0);
-  const { config } = usePrepareContractWrite({
-    address: SMARTCONTRACT_ADDRESS,
-    abi: [
-      {
-        name: "depositFunds",
-        type: "function",
-        stateMutability: "payable",
-        inputs: [
-          { internalType: "uint32", name: "serviceId", type: "uint32" },
-          { internalType: "address", name: "seller", type: "address" },
-        ],
-        args: [serviceId],
-        enabled: Boolean(serviceId),
-      },
-    ],
-    functionName: "depositFunds",
-    args: [serviceId],
-    enabled: Boolean(serviceId),
-  });
+  // const { config } = usePrepareContractWrite({
+  //   address: SMARTCONTRACT_ADDRESS,
+  //   abi: [
+  //     {
+  //       name: "depositFunds",
+  //       type: "function",
+  //       stateMutability: "payable",
+  //       inputs: [
+  //         { internalType: "uint32", name: "serviceId", type: "uint32" },
+  //         { internalType: "address", name: "seller", type: "address" },
+  //       ],
+  //       args: [serviceId],
+  //       enabled: Boolean(serviceId),
+  //     },
+  //   ],
+  //   functionName: "depositFunds",
+  //   args: [serviceId],
+  //   enabled: Boolean(serviceId),
+  // });
 
-  const { data, write } = useContractWrite(config);
+  // const { data, write } = useContractWrite(config);
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
-  });
+  // const { isLoading, isSuccess } = useWaitForTransaction({
+  //   hash: data?.hash,
+  // });
 
   return (
     <div
@@ -128,7 +128,7 @@ const SupportFeeModal: React.FC<SupportFeeModalProps> = ({
             <span>15 USDC</span>
           </div>
           <div className="items-center px-4 py-3">
-            {isLoading && <span>Waiting for transaction to be mined...</span>}
+            {/* {isLoading && <span>Waiting for transaction to be mined...</span>}
             {isSuccess && (
               <Button
                 className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -142,7 +142,7 @@ const SupportFeeModal: React.FC<SupportFeeModalProps> = ({
               >
                 Pay fee
               </Button>
-            )}
+            )} */}
           </div>
         </div>
       </div>

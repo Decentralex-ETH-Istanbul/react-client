@@ -2,7 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "@mui/material";
 import lighthouse from '@lighthouse-web3/sdk'
 import { useAccount } from "wagmi";
-import { API_KEY } from "../consts";
+import { API_KEY_USERS } from "../consts";
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import crypto from 'crypto';
@@ -46,7 +46,7 @@ const Create = () => {
     const hash = await sha256(unique);
 
     const data = `${address}/${role}/${hash}/rep0`;
-    const response = await lighthouse.uploadText(data, API_KEY, address)
+    const response = await lighthouse.uploadText(data, API_KEY_USERS, address)
     console.log(response)
   }
 

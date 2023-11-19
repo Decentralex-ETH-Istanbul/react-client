@@ -1,3 +1,4 @@
 
-export const API_KEY = "5286993e.eb9b1390632d415c988986f066e1abc6" || ""
+export const API_KEY_USERS = "6097599e.48e8ad77a1a248aaa81771a978efca83" || ""
+export const API_KEY_DISPUTES = "2343e66a.2f3d6eb6344348278bf9034f02d0cf8e" || ""
 export const SMARTCONTRACT_ADDRESS = "0xf29c47Dea1d57B484131d904e206FB659780a0Ca" || ""
