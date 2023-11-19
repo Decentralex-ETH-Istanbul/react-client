@@ -128,13 +128,11 @@ const SupportFeeModal: React.FC<SupportFeeModalProps> = ({
             <span>15 USDC</span>
           </div>
           <div className="items-center px-4 py-3">
-            {/* {isLoading && <span>Waiting for transaction to be mined...</span>}
-            {isSuccess && (
               <Button
                 className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => {
                   setServiceId(serviceId + 1);
-                  write?.();
+                  // write?.();
                   onClose();
                 }}
                 variant="contained"
@@ -142,7 +140,6 @@ const SupportFeeModal: React.FC<SupportFeeModalProps> = ({
               >
                 Pay fee
               </Button>
-            )} */}
           </div>
         </div>
       </div>
