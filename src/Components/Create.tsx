@@ -2,7 +2,10 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "@mui/material";
 import lighthouse from '@lighthouse-web3/sdk'
 import { useAccount } from "wagmi";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import crypto from 'crypto';
+import { sha256 } from 'hash-wasm';
 
 enum Role{
   Client="Client",
@@ -13,19 +16,68 @@ const apiKey = "5286993e.eb9b1390632d415c988986f066e1abc6" || ""
 
 const Create = () => {
 
+  const {
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    logout
+  } = useAuth0();
+  
+
   const { address } = useAccount();
+
+  useEffect(() => {
+
+    if (isAuthenticated) {
+      console.log("user", user)
+      console.log("address", address)
+    }
+  }, [isAuthenticated])
 
   console.log("address", address)
 
+  
+
   const handleUpload: any = async( role: Role) => {
-    const data = `${address}/${role}/wdID-XXX` 
+    // add random numvber between 1 and 1000 to the end of the address to make it unique
+    
+
+    const unique = address + role + Math.floor(Math.random() * 1000)
+
+    const hash = await sha256(unique);
+
+    const data = `${address}/${role}/${hash}/rep0`;
     const response = await lighthouse.uploadText(data, apiKey, address)
     console.log(response)
   }
 
+  const [count, setCount] = useState(() => {
+    const savedCount = localStorage.getItem('count');
+    return savedCount !== null ? parseInt(savedCount, 10) : 0;
+  });
+
+  // Update local storage whenever count changes, convert count to string
   useEffect(() => {
-    console.log(address)
-  }, [])
+    localStorage.setItem('count', count.toString());
+  }, [count]);
+
+  useEffect(() => {
+
+    
+    if(user){
+      console.log('connected')
+
+      if(count === 0){
+        console.log('client: ', count)
+        handleUpload(Role.Client)
+      }
+      else if(count === 1){
+        console.log('Freelancer: ', count)
+
+        handleUpload(Role.Freelancer)
+      }
+    }
+  }, [user,count])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-6 py-8">
@@ -36,8 +88,11 @@ const Create = () => {
           <Button
             className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-xl md:text-2xl"
             variant="contained"
-            onClick={handleUpload(Role.Client)}
-            disabled={true}
+            onClick={() => {
+              loginWithRedirect();
+              setCount(0);
+          }}
+            disabled={false}
           >
             Client
           </Button>
@@ -47,7 +102,10 @@ const Create = () => {
             className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-xl md:text-2xl"
             variant="contained"
             disabled={!address}
-            onClick={handleUpload(Role.Freelancer)}
+            onClick={() => {
+              loginWithRedirect();
+              setCount(1);
+          }}
             href="/freelancerProfile"
           >
             Freelancer

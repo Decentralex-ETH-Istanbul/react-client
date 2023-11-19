@@ -13,6 +13,10 @@ import {
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
+import { Auth0Provider } from "@auth0/auth0-react";
+import history from "./utils/history";
+import { getConfig } from "./config";
+
 
 const { chains, provider } = configureChains(
   [
@@ -115,12 +119,37 @@ const wagmiClient = createClient({
   provider,
 });
 
+const onRedirectCallback = (appState: any) => {
+  history.push(
+    appState && appState.returnTo ? appState.returnTo : "http://localhost:5173/create"
+  );
+
+  
+};
+
+// Please see https://auth0.github.io/auth0-react/interfaces/Auth0ProviderOptions.html
+// for a full list of the available properties on the provider
+const config = getConfig();
+
+const providerConfig = {
+  domain: config.domain,
+  clientId: config.clientId,
+  onRedirectCallback,
+  authorizationParams: {
+    redirect_uri: "http://localhost:5173/create",
+    ...(config.audience ? { audience: config.audience } : null),
+  },
+};
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <WagmiConfig client={wagmiClient}>
+  <Auth0Provider
+    {...providerConfig}
+  >    <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={midnightTheme()} coolMode>
         <App />
       </RainbowKitProvider>
     </WagmiConfig>
+    </Auth0Provider>
   </React.StrictMode>
 );
